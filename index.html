@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title Pagina Para La Mas bonita</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6f2;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ffccf2;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            color: #ff66b3;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            background-color: #ffe6f2;
+            border: 2px solid #ff99cc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #ffccf2;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bienvenida a la Página de Mi Amiguita</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Acerca de Mí</h2>
+            <p>Hola, Odaaa so yio Webito :D tiamo.</p>
+        </section>
+        <section>
+            <h2>Videojuego</h2>
+            <div class="game-container">
+                <canvas id="gameCanvas" width="300" height="300"></canvas>
+            </div>
+        </section>
+        <section>
+            <h2>Recuerda que</h2>
+            <div style="padding: 10px; border: 1px solid #ff99cc; border-radius: 5px; background-color: #fff;">
+                Siempre serás la niña más bonis que he conocido.
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Página para Camilita <3</p>
+    </footer>
+    <script>
+        // Código del videojuego con control de barra
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height - 30;
+        let dx = 2;
+        let dy = -2;
+        const ballRadius = 10;
+        const paddleHeight = 10;
+        const paddleWidth = 75;
+        let paddleX = (canvas.width - paddleWidth) / 2;
+        let rightPressed = false;
+        let leftPressed = false;
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(e) {
+            if(e.key == "Right" || e.key == "ArrowRight") {
+                rightPressed = true;
+            } else if(e.key == "Left" || e.key == "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if(e.key == "Right" || e.key == "ArrowRight") {
+                rightPressed = false;
+            } else if(e.key == "Left" || e.key == "ArrowLeft") {
+                leftPressed = false;
+            }
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "#ff66b3";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+            ctx.fillStyle = "#ff66b3";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            drawPaddle();
+
+            if(ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
+                dx = -dx;
+            }
+            if(ballY + dy < ballRadius) {
+                dy = -dy;
+            } else if(ballY + dy > canvas.height - ballRadius) {
+                if(ballX > paddleX && ballX < paddleX + paddleWidth) {
+                    dy = -dy;
+                } else {
+                    document.location.reload();
+                    alert("Ay vv ni sabes jugar");
+                }
+            }
+
+            if(rightPressed && paddleX < canvas.width - paddleWidth) {
+                paddleX += 7;
+            } else if(leftPressed && paddleX > 0) {
+                paddleX -= 7;
+            }
+
+            ballX += dx;
+            ballY += dy;
+        }
+
+        setInterval(draw, 10);
+    </script>
+</body>
+</html>
